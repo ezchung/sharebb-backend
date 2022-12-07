@@ -2,8 +2,10 @@ from flask import Flask, request, redirect, url_for, flash, render_template
 from util.helpers import upload_file_to_s3, s3
 
 from werkzeug.utils import secure_filename
+from flask_debugtoolbar import DebugToolbarExtension
 
-# Regular flask way,
+from models import (
+    db, connect_db, User, Location, DEFAULT_IMAGE_URL)
 
 import os
 import sys
@@ -11,61 +13,35 @@ import boto3
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = "secret"
+# Get DB_URI from environ variable (useful for production/testing) or,
+# if not set there, use development local db.
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    os.environ['DATABASE_URL'].replace("postgres://", "postgresql://"))
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = False
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+toolbar = DebugToolbarExtension(app)
+
+connect_db(app)
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 BUCKET_NAME = os.environ["AWS_BUCKET_NAME"]
 
-# IPython and try out to see if works
-# Method to list buckets, see if authenticating
-
-# bucket = s3.list_buckets()['Buckets']
-
-# print(bucket[0]['Name'])
-
-# curr_path = os.getcwd()
-# file = 'lottery.csv'
-# filename = os.path(curr_path, 'data', file)
-
-# data = open(filename, 'rb')
-
-# s3.upload_file(filename, bucket[0]['Name'], file)
-
-# def upload_file_to_s3(file, acl="public-read"):
-#     print(s3)
-#     filename = secure_filename(file.filename)
-#     s3.upload_fileobj(
-#         file,
-#         os.environ("AWS_BUCKET_NAME"),
-#         file.filename,
-#         ExtraArgs={
-#             "ACL": acl,
-#             "ContentType": file.content_type
-#         }
-#     )
-#     return file.filename
-
-# pic = "\\wsl$\Ubuntu\home\ezray\rithm\exercises\week_10\sharebb\backend\computer_person.png"
 ####################### Routes ########################
-# @app.route('/upload', methods=["GET"])
-# def testCreate():
 
-#   dataForm = {
-#     'name':'test user',
-#     'address': 'test address',
-#     'image': "https://tinyurl.com/missing-tv",
-#   }
-
-#   upload_file_to_s3("https://tinyurl.com/missing-tv")
 
 @app.route("/")
 def render_form():
     return render_template("form.html")
 
 # function to check file extension
+
+
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route("/upload", methods=["POST"])
 def create():
@@ -92,8 +68,6 @@ def create():
             # write your code here
             # to save the file name in database
             sThree = boto3.client('s3')
-            print(output, "<----- output")
-            print(sThree, BUCKET_NAME, "<--------- sthree bucket")
             result = s3.list_buckets()
             print(result, "<----- result")
             flash("Success upload")
@@ -109,5 +83,6 @@ def create():
         flash("File type not accepted,please try again.")
         return redirect(url_for('new'))
 
+
 if __name__ == "__main__":
-  app.run()
+    app.run()
