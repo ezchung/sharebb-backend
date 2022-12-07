@@ -288,6 +288,9 @@ def add_location():
 
     form = AddLocationForm()
 
+    user = User.query.get(session[CURR_USER_KEY])
+    print(user)
+
     if form.validate_on_submit():
         try:
             location = Location.add(
@@ -307,7 +310,7 @@ def add_location():
 
     else:
         print(form)
-        return render_template('/', form=form)
+        return render_template('/base.html', form=form)
 
 
 @app.errorhandler(404)
