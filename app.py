@@ -3,6 +3,11 @@ from util.helpers import upload_file_to_s3, s3
 
 from werkzeug.utils import secure_filename
 from flask_debugtoolbar import DebugToolbarExtension
+from sqlalchemy.exc import IntegrityError
+
+from forms import (
+    UserForm, UserEditForm, MessageForm, CSRFProtection,
+)
 
 from models import (
     db, connect_db, User, Location, DEFAULT_IMAGE_URL)
@@ -79,14 +84,13 @@ def signup():
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
-    form = UserAddForm()
+    form = UserForm()
 
     if form.validate_on_submit():
         try:
             user = User.signup(
                 username=form.username.data,
                 password=form.password.data,
-                email=form.email.data,
                 image_url=form.image_url.data or User.image_url.default.arg,
             )
             db.session.commit()
@@ -107,7 +111,7 @@ def signup():
 def login():
     """Handle user login and redirect to homepage on success."""
 
-    form = LoginForm()
+    form = UserForm()
 
     if form.validate_on_submit():
         user = User.authenticate(
@@ -144,8 +148,8 @@ def logout():
 def render_form():
     return render_template("form.html")
 
-# function to check file extension
 
+# function to check file extension
 
 def allowed_file(filename):
     return '.' in filename and \
