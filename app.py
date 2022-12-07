@@ -14,6 +14,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret"
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+BUCKET_NAME = os.environ["AWS_BUCKET_NAME"]
 
 # IPython and try out to see if works
 # Method to list buckets, see if authenticating
@@ -90,10 +91,11 @@ def create():
         if output:
             # write your code here
             # to save the file name in database
+            sThree = boto3.client('s3')
             print(output, "<----- output")
-            print(s3)
-            # result = s3.Object(os.environ("AWS_BUCKET_NAME"), file.filename)
-            # print(result, "<----- result")
+            print(sThree, BUCKET_NAME, "<--------- sthree bucket")
+            result = s3.list_buckets()
+            print(result, "<----- result")
             flash("Success upload")
             return redirect("/")
 
