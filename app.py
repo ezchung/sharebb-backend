@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, flash, render_template, session
+from flask import Flask, request, redirect, url_for, flash, render_template, session, g
 from util.helpers import upload_file_to_s3, s3
 
 from werkzeug.utils import secure_filename
@@ -10,6 +10,8 @@ from models import (
 import os
 import sys
 import boto3
+
+CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 
@@ -24,11 +26,118 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
+db.create_all()
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 BUCKET_NAME = os.environ["AWS_BUCKET_NAME"]
 
 ####################### Routes ########################
+
+
+@app.before_request
+def add_user_to_g():
+    """If we're logged in, add curr user to Flask global."""
+
+    if CURR_USER_KEY in session:
+        g.user = User.query.get(session[CURR_USER_KEY])
+
+    else:
+        g.user = None
+
+
+@app.before_request
+def add_csrf_only_form():
+    """Add a CSRF-only form so that every route can use it."""
+
+    g.csrf_form = CSRFProtection()
+
+
+def do_login(user):
+    """Log in user."""
+
+    session[CURR_USER_KEY] = user.id
+
+
+def do_logout():
+    """Log out user."""
+
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
+
+
+@app.route('/signup', methods=["GET", "POST"])
+def signup():
+    """Handle user signup.
+
+    Create new user and add to DB. Redirect to home page.
+
+    If form not valid, present form.
+
+    If the there already is a user with that username: flash message
+    and re-present form.
+    """
+
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
+    form = UserAddForm()
+
+    if form.validate_on_submit():
+        try:
+            user = User.signup(
+                username=form.username.data,
+                password=form.password.data,
+                email=form.email.data,
+                image_url=form.image_url.data or User.image_url.default.arg,
+            )
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Username already taken", 'danger')
+            return render_template('users/signup.html', form=form)
+
+        do_login(user)
+
+        return redirect("/")
+
+    else:
+        return render_template('users/signup.html', form=form)
+
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login and redirect to homepage on success."""
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(
+            form.username.data,
+            form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f"Hello, {user.username}!", "success")
+            return redirect("/")
+
+        flash("Invalid credentials.", 'danger')
+
+    return render_template('users/login.html', form=form)
+
+
+@app.post('/logout')
+def logout():
+    """Handle logout of user and redirect to homepage."""
+
+    form = g.csrf_form
+
+    if not form.validate_on_submit() or not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    do_logout()
+
+    flash("You have successfully logged out.", 'success')
+    return redirect("/login")
 
 
 @app.route("/")
@@ -91,21 +200,20 @@ def list_users():
     Can take a 'q' param in querystring to search by that username.
     """
 
-    User.signup(username="PhilEzra", password="Whatever")
-    db.session.commit()
+    # db.session.commit()
 
-    # if not g.user:
-    #     flash("Access unauthorized.", "danger")
-    #     return redirect("/")
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
-    # search = request.args.get('q')
+    search = request.args.get('q')
 
-    # if not search:
-    #     users = User.query.all()
-    # else:
-    #     users = User.query.filter(User.username.like(f"%{search}%")).all()
+    if not search:
+        users = User.query.all()
+    else:
+        users = User.query.filter(User.username.like(f"%{search}%")).all()
 
-    # return render_template('users/index.html', users=users)
+    return render_template('users/index.html', users=users)
 
 
 # if __name__ == "__main__":
