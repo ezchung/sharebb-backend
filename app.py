@@ -220,5 +220,77 @@ def list_users():
     return render_template('users/index.html', users=users)
 
 
-# if __name__ == "__main__":
-#     app.run()
+@app.get('/users/<int:user_id>')
+def show_user(user_id):
+    """Show user profile."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = User.query.get_or_404(user_id)
+
+    return render_template('users/show.html', user=user)
+
+
+@app.route('/users/profile', methods=["GET", "POST"])
+def edit_profile():
+    """Update profile for current user.
+
+    Redirect to user page on success.
+    """
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = g.user
+    form = UserEditForm(obj=user)
+
+    if form.validate_on_submit():
+        if User.authenticate(user.username, form.password.data):
+            user.username = form.username.data
+
+            db.session.commit()
+            return redirect(f"/users/{user.id}")
+
+        flash("Wrong password, please try again.", 'danger')
+
+    return render_template('users/edit.html', form=form, user_id=user.id)
+
+
+@app.post('/users/delete')
+def delete_user():
+    """Delete user.
+
+    Redirect to signup page.
+    """
+
+    form = g.csrf_form
+
+    if not form.validate_on_submit() or not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    do_logout()
+
+    db.session.delete(g.user)
+    db.session.commit()
+
+    return redirect("/signup")
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """404 NOT FOUND page."""
+
+    return render_template('404.html'), 404
+
+
+@app.after_request
+def add_header(response):
+    """Add non-caching headers on every request."""
+
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+    response.cache_control.no_store = True
+    return response
