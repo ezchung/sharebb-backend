@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, url_for, flash, render_template
-from util.helpers import upload_file_to_s3
+from util.helpers import upload_file_to_s3, s3
 
 from werkzeug.utils import secure_filename
 
@@ -90,9 +90,12 @@ def create():
         if output:
             # write your code here
             # to save the file name in database
-
+            print(output, "<----- output")
+            print(s3)
+            # result = s3.Object(os.environ("AWS_BUCKET_NAME"), file.filename)
+            # print(result, "<----- result")
             flash("Success upload")
-            return redirect(url_for('show'))
+            return redirect("/")
 
         # upload failed, redirect to upload page
         else:
