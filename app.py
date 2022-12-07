@@ -6,7 +6,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from forms import (
-    UserForm, UserEditForm, MessageForm, CSRFProtection,
+    UserForm, UserEditForm, MessageForm, AddLocationForm, CSRFProtection,
 )
 
 from models import (
@@ -36,7 +36,7 @@ db.create_all()
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 BUCKET_NAME = os.environ["AWS_BUCKET_NAME"]
 
-####################### Routes ########################
+####################### User Routes ########################
 
 
 @app.before_request
@@ -278,6 +278,36 @@ def delete_user():
     db.session.commit()
 
     return redirect("/signup")
+
+####################### Location Routes ########################
+
+
+@app.route('/location/add', methods=["GET", "POST"])
+def add_location():
+    """Add new location."""
+
+    form = AddLocationForm()
+
+    if form.validate_on_submit():
+        try:
+            location = Location.add(
+                owner_id=form.owner_id.data,
+                image_url=form.image_url.data or Location.image_url.default.arg,
+                price=form.price.data,
+                details=form.details.data,
+                address=form.address.data,
+            )
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Invalid information", 'danger')
+            return render_template('location/add.html', form=form)
+
+        return redirect("/")
+
+    else:
+        print(form)
+        return render_template('/', form=form)
 
 
 @app.errorhandler(404)

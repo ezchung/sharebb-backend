@@ -87,6 +87,10 @@ class Location(db.Model):
         nullable=False,
     )
 
+    address = db.Column(
+        nullable=False,
+    )
+
     image_url = db.Column(
         db.Text,
         default=DEFAULT_IMAGE_URL,
@@ -101,6 +105,21 @@ class Location(db.Model):
         db.Text,
         nullable=False,
     )
+
+    @classmethod
+    def add(cls, price, image_url, details, owner_id, address):
+        """Add new location"""
+
+        location = Location(
+            image_url=image_url,
+            owner_id=owner_id,
+            price=price,
+            details=details,
+            address=address,
+        )
+
+        db.session.add(location)
+        return location
 
 
 def connect_db(app):
