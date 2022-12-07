@@ -72,7 +72,7 @@ class User(db.Model):
         return False
 
 
-class Location(db.model):
+class Location(db.Model):
     """Location in the system."""
 
     __tablename__ = 'locations'

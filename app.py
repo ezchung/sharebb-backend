@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, flash, render_template
+from flask import Flask, request, redirect, url_for, flash, render_template, session
 from util.helpers import upload_file_to_s3, s3
 
 from werkzeug.utils import secure_filename
@@ -84,5 +84,29 @@ def create():
         return redirect(url_for('new'))
 
 
-if __name__ == "__main__":
-    app.run()
+@app.post('/users')
+def list_users():
+    """Page with listing of users.
+
+    Can take a 'q' param in querystring to search by that username.
+    """
+
+    User.signup(username="PhilEzra", password="Whatever")
+    db.session.commit()
+
+    # if not g.user:
+    #     flash("Access unauthorized.", "danger")
+    #     return redirect("/")
+
+    # search = request.args.get('q')
+
+    # if not search:
+    #     users = User.query.all()
+    # else:
+    #     users = User.query.filter(User.username.like(f"%{search}%")).all()
+
+    # return render_template('users/index.html', users=users)
+
+
+# if __name__ == "__main__":
+#     app.run()
