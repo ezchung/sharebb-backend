@@ -32,6 +32,12 @@ class User(db.Model):
 
     locations = db.relationship('Location', backref="user")
 
+    booked_locations = db.relationship(
+        'Location',
+        secondary='bookings',
+        backref='users_who_booked'
+    )
+
     def __repr__(self):
         return f"<User #{self.id}: {self.username}>"
 
@@ -123,6 +129,54 @@ class Location(db.Model):
 
         db.session.add(location)
         return location
+    
+    def is_booked_by(self,curr_user):
+        """ Is this location currently booked by current user? """
+
+        return any(user.id for user in self.users_who_booked if user.id == curr_user.id)
+
+
+class Booking(db.Model):
+    """ Bookings in the system """
+
+    __tablename__ = 'bookings'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    location_id = db.Column(
+        db.Integer,
+        db.ForeignKey('locations.id'),
+        nullable=False
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id'),
+        nullable=False
+    )
+
+    __table_args__ = (db.UniqueConstraint(location_id, user_id),)
+
+    @classmethod
+    def toggle_booked(cls, location_id, user_id):
+        """ Is the location booked by current user?
+            Add or remove record from bookings table
+        """
+
+        booked = cls.query.filter(
+            (user_id == cls.user_id) &
+            (location_id == cls.location_id)
+        ).one_or_none()
+
+        if not booked:
+            new_booking = cls(location_id=location_id, user_id=user_id)
+
+            db.session.add(new_booking)
+        else:
+            db.session.delete(booked)
 
 
 def connect_db(app):
