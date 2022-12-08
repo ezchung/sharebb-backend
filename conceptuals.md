@@ -15,3 +15,21 @@ TODO:
 
 2. Get the url from AWS ***DONE
    and place image url into database
+
+SQL Strings 
+`SELECT locations.address FROM bookings 
+   JOIN users ON users.id = bookings.user_id 
+   JOIN locations ON locations.id = bookings.location_id 
+   WHERE users.username LIKE 'phil';`
+
+   - Returns address of locations where user whose username is phil has booked 
+Translation to SQLAlchemy
+- 
+
+SELECT address FROM locations 
+   JOIN users ON users.id = locations.owner_id 
+   WHERE users.username = 'phil';
+
+   - Getting the address where the owner of the location is phil.
+Translation to SQLAlchemy
+- 

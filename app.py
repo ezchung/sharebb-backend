@@ -3,13 +3,14 @@ from util.helpers import upload_file_to_s3
 
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import Unauthorized
 
 from forms import (
     UserForm, UserEditForm, MessageForm, AddLocationForm, CSRFProtection,
 )
 
 from models import (
-    db, connect_db, User, Location)
+    db, connect_db, User, Location, Booking)
 
 import os
 import sys
@@ -145,9 +146,12 @@ def logout():
 
 @app.route("/")
 def render_form():
+    
+    form = g.csrf_form
+
     if g.user:
         locations = Location.query.all()
-        return render_template("home.html", locations=locations)
+        return render_template("home.html", locations=locations, form=form)
     return render_template("base.html")
 
 
@@ -229,6 +233,41 @@ def delete_user():
 
 ####################### Location Routes ########################
 
+@app.get('/locations')
+def list_users():
+    """Page with listing of locations.
+
+    Can take a 'q' param in querystring to search by that username.
+    """
+
+    db.session.commit()
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    search = request.args.get('q')
+
+    if not search:
+        locations = Location.query.all()
+    else:
+        locations = Location.query.filter(
+            Location.address.ilike(f"%{search}%")).all()
+
+    return render_template('home.html', locations=locations)
+
+
+@app.get('/locations/<int:location_id>')
+def show_location(location_id):
+    """ Displays location details
+        Buttons to book or to go to owner's profile
+    """
+
+    location = Location.query.get_or_404(location_id)
+    user_id = location.user.id
+
+    return render_template('/locations/show.html', location=location, user_id=user_id)
+
 
 @app.route('/locations/add', methods=["GET", "POST"])
 def add_location():
@@ -279,40 +318,24 @@ def add_location():
     return render_template('add_locations.html', form=form)
 
 
-@app.get('/locations/<int:location_id>')
-def show_location(location_id):
-    """ Displays location details
-        Buttons to book or to go to owner's profile
+@app.post('/locations/<int:location_id>/booked_toggle')
+def booked_toggle(location_id):
+    """
+        Input: location_id
+        Output: redirect to root
+        Adds or removes record from bookings table and redirects to reference
     """
 
-    location = Location.query.get_or_404(location_id)
-    user_id = location.user.id
+    form = g.csrf_form
 
-    return render_template('/locations/show.html', location=location, user_id=user_id)
+    if not form.validate_on_submit():
+        raise Unauthorized
 
-
-@app.get('/locations')
-def list_users():
-    """Page with listing of locations.
-
-    Can take a 'q' param in querystring to search by that username.
-    """
-
+    Booking.toggle_booked(location_id, g.user.id)
     db.session.commit()
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    search = request.args.get('q')
-
-    if not search:
-        locations = Location.query.all()
-    else:
-        locations = Location.query.filter(
-            Location.address.ilike(f"%{search}%")).all()
-
-    return render_template('home.html', locations=locations)
+    from_url = request.form['from-url']
+    return redirect(from_url)
 
 
 @app.errorhandler(404)

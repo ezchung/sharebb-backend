@@ -1,0 +1,5 @@
+<form action="/locations/{{location.id}}/booked_toggle" method="POST">
+  {{ form.hidden_tag() }}
+  <input type="hidden" name="from-url" value="{{request.url}}">
+  <button class="like bi bi-hand-thumbs-up{% if location.is_booked_by(g.user) %}-fill{% endif %}"></button>
+</form>
