@@ -107,46 +107,46 @@ def do_logout():
 #         return render_template('users/signup.html', form=form)
 
 
-# @app.route('/login', methods=["GET", "POST"])
-# def login():
-#     """Handle user login and redirect to homepage on success."""
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login and redirect to homepage on success."""
 
-#     form = UserForm()
+    form = UserForm()
 
-#     if form.validate_on_submit():
-#         user = User.authenticate(
-#             form.username.data,
-#             form.password.data)
+    if form.validate_on_submit():
+        user = User.authenticate(
+            form.username.data,
+            form.password.data)
 
-#         if user:
-#             do_login(user)
-#             flash(f"Hello, {user.username}!", "success")
-#             return redirect("/")
+        if user:
+            do_login(user)
+            flash(f"Hello, {user.username}!", "success")
+            return redirect("/")
 
-#         flash("Invalid credentials.", 'danger')
+        flash("Invalid credentials.", 'danger')
 
-#     return render_template('users/login.html', form=form)
+    return render_template('login.html', form=form)
 
 
-# @app.post('/logout')
-# def logout():
-#     """Handle logout of user and redirect to homepage."""
+@app.post('/logout')
+def logout():
+    """Handle logout of user and redirect to homepage."""
 
-#     form = g.csrf_form
+    form = g.csrf_form
 
-#     if not form.validate_on_submit() or not g.user:
-#         flash("Access unauthorized.", "danger")
-#         return redirect("/")
+    if not form.validate_on_submit() or not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
-#     do_logout()
+    do_logout()
 
-#     flash("You have successfully logged out.", 'success')
-#     return redirect("/login")
+    flash("You have successfully logged out.", 'success')
+    return redirect("/login")
 
 
 @app.route("/")
 def render_form():
-    return render_template("form.html")
+    return render_template("base.html")
 
 
 ############################## AWS Routes ################################
@@ -206,12 +206,12 @@ def list_users():
 
     Can take a 'q' param in querystring to search by that username.
     """
+# TODO: change class to Locations as well as route
+    db.session.commit()
 
-    # db.session.commit()
-
-    # if not g.user:
-    #     flash("Access unauthorized.", "danger")
-    #     return redirect("/")
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
     search = request.args.get('q')
 
@@ -293,9 +293,9 @@ def add_location():
 
     user = User.query.all()
     user1 = User.query.filter_by(username='ez').first()
-    print(user1, "<----------- now in user1 in location route")
+    # print(user1, "<----------- now in user1 in location route")
     
-    print(request.form, "<--------- form form")
+    # print(request.form, "<--------- form form")
 
     if form.validate_on_submit():
         try:
@@ -313,14 +313,14 @@ def add_location():
             flash("Invalid information", 'danger')
             return render_template('location/add.html', form=form)
 
-        print("validated on submit")
+        # print("validated on submit")
         return redirect("/")
 
     else:
         # breakpoint()
-        print("sorry not validated")
-    print(form, "<---------- result")
-    return render_template('base.html', form=form)
+    #     print("sorry not validated")
+    # print(form, "<---------- result")
+      return render_template('add_locations.html', form=form)
 
 
 @app.errorhandler(404)

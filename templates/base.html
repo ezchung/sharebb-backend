@@ -18,26 +18,29 @@
 
 <body class="{% block body_class %}{% endblock %}">
 
-{% block content %}
-
-  <div class="row justify-content-md-center">
-    <div class="col-md-7 col-lg-5">
-      <h2 class="join-message">Add Location</h2>
-      <form method="POST" id="user_form">
-        {{ form.hidden_tag() }}
-
-        {% for field in form if field.widget.input_type != 'hidden' %}
-          {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
-          {% endfor %}
-          {{ field(placeholder=field.label.text, class="form-control") }}
-        {% endfor %}
-
-        <button class="btn btn-primary btn-lg">Add Location</button>
-      </form>
-    </div>
+  <div class="container-fluid">
+    <ul>
+      {% if not g.user %}
+            <li><a href="/signup">Sign up</a></li>
+            <li><a href="/login">Log in</a></li>
+      {% else %}
+            <li>
+              <a href="/users/{{ g.user.id }}">
+                {{ g.user.username }}
+              </a>
+            </li>
+             <li><a href="/">Users</a></li>
+            <!-- <li><a href="/">New Message</a></li> -->
+          <form action="/logout" method="POST">
+            {{ g.csrf_form.hidden_tag() }}
+            <li><button class="link-button">Log Out</button></li>
+            <!-- <a href="/logout">Log out</a> -->
+          </form>
+      {% endif %}
+    </ul>
   </div>
 
+{% block content %}
 {% endblock %}
 
 </div>
