@@ -19,7 +19,7 @@ class UserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Length(min=6)])
 
-# TODO: add properties when working with locations and connecting
+# TODO: add properties when working with locations and connecting. Maybe delete FIXME:
 class UserEditForm(FlaskForm):
     """Form for editing users."""
 

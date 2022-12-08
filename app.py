@@ -1,7 +1,6 @@
-from flask import Flask, request, redirect, url_for, flash, render_template, session, g
-from util.helpers import upload_file_to_s3, s3
+from flask import Flask, request, redirect, flash, render_template, session, g
+from util.helpers import upload_file_to_s3
 
-from werkzeug.utils import secure_filename
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
@@ -10,7 +9,7 @@ from forms import (
 )
 
 from models import (
-    db, connect_db, User, Location, DEFAULT_IMAGE_URL)
+    db, connect_db, User, Location)
 
 import os
 import sys
@@ -152,60 +151,14 @@ def render_form():
     return render_template("base.html")
 
 
-############################## AWS Routes ################################
+############################## AWS Function ################################
 
-# function to check file extension
-
+""" Takes filename (string). Checks whether file is an allowed file
+    Returns boolean
+"""
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-@app.route("/upload", methods=["POST"])
-def create():
-    # breakpoint()
-    # check whether an input field with name 'user_file' exist
-    if 'user_file' not in request.files:
-        flash('No user_file key in request.files')
-        return redirect(url_for('new'))
-
-    # after confirm 'user_file' exist, get the file from input
-    file = request.files['user_file']
-
-    # check whether a file is selected
-    if file.filename == '':
-        flash('No selected file')
-        return redirect(url_for('new'))
-
-    # check whether the file extension is allowed (eg. png,jpeg,jpg,gif)
-    if file and allowed_file(file.filename):
-        output = upload_file_to_s3(file)
-
-        # if upload success,will return file name of uploaded file
-        if output:
-            # write your code here
-            # to save the file name in database
-            sThree = boto3.client('s3')
-            result = s3.list_buckets()
-            print(result, "<----- result")
-            # obj = s3.get_object(Bucket=BUCKET_NAME, Key=file.filename)
-            # print(obj['Body'], "<========== object")
-            # j = f'https://{BUCKET_NAME}.s3.{REGION_CODE}.amazonaws.com/{file.filename}'
-            # print(j, "<------------ picture url")
-            # i = f'https://s3.{REGION_CODE}.amazonaws.com/{BUCKET_NAME}/{file.filename}'
-            # print(i, "<=============== picture 2")
-            flash("Success upload")
-            return redirect("/")
-
-        # upload failed, redirect to upload page
-        else:
-            flash("Unable to upload, try again")
-            return redirect(url_for('new'))
-
-    # if file extension not allowed
-    else:
-        flash("File type not accepted,please try again.")
-        return redirect(url_for('new'))
 
 ############################## User Routes ####################################
 
@@ -240,7 +193,7 @@ def edit_profile(user_id):
     print(user.locations, "<--------- locations")
 
     # Make an array. Call a function on class User to get list of address
-    # When rendering template, pass in array of locations
+    # When rendering template, pass in array of locations FIXME:
 
     if form.validate_on_submit():
         if User.authenticate(user.username, form.password.data):
@@ -298,7 +251,10 @@ def add_location():
 
         if file and allowed_file(file.filename):
             output = upload_file_to_s3(file)
-
+            # print(s3.Bucket(BUCKET_NAME), "<-------- bucket")
+            # print(s3.get_object(Bucket=BUCKET_NAME, Key=file.filename), "<------- objects")
+            # obj = s3.get_object(Bucket=BUCKET_NAME, Key=file.filename)
+            # print(obj['Body'].read().decode("utf-8"), "<========== object get object")
             if output:
                 try:
                     img_url = f'https://s3.{REGION_CODE}.amazonaws.com/{BUCKET_NAME}/{file.filename}'
@@ -331,7 +287,6 @@ def show_location(location_id):
 
     location = Location.query.get_or_404(location_id)
     user_id = location.user.id
-    print(user_id, "<------------ user id here")
 
     return render_template('/locations/show.html', location=location, user_id=user_id)
 
