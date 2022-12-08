@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, DecimalField
+from wtforms import StringField, PasswordField, TextAreaField, FloatField
 from wtforms.validators import DataRequired, Length
 
 
@@ -19,7 +19,7 @@ class UserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Length(min=6)])
 
-
+# TODO: add properties when working with locations and connecting
 class UserEditForm(FlaskForm):
     """Form for editing users."""
 
@@ -30,8 +30,8 @@ class UserEditForm(FlaskForm):
 class AddLocationForm(FlaskForm):
     """Form for adding a location."""
 
-    owner = StringField('Owner', validators=[DataRequired()])
-    price = DecimalField('Price', validators=[DataRequired()])
+    price = FloatField('Price', validators=[DataRequired()])
     details = TextAreaField('Details', validators=[DataRequired()])
     address = TextAreaField('Address', validators=[
                             DataRequired(), Length(min=6)])
+    image_url = StringField('Image URL', validators=[DataRequired()])

@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
-DEFAULT_IMAGE_URL = "/static/images/default-pic.png"
+DEFAULT_IMAGE_URL = "https://sharebb.s3.us-west-1.amazonaws.com/computer_person.png"
 
 
 class User(db.Model):
@@ -88,6 +88,7 @@ class Location(db.Model):
     )
 
     address = db.Column(
+        db.Text,
         nullable=False,
     )
 

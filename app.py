@@ -70,84 +70,86 @@ def do_logout():
         del session[CURR_USER_KEY]
 
 
-@app.route('/signup', methods=["GET", "POST"])
-def signup():
-    """Handle user signup.
+# @app.route('/signup', methods=["GET", "POST"])
+# def signup():
+#     """Handle user signup.
 
-    Create new user and add to DB. Redirect to home page.
+#     Create new user and add to DB. Redirect to home page.
 
-    If form not valid, present form.
+#     If form not valid, present form.
 
-    If the there already is a user with that username: flash message
-    and re-present form.
-    """
+#     If the there already is a user with that username: flash message
+#     and re-present form.
+#     """
 
-    if CURR_USER_KEY in session:
-        del session[CURR_USER_KEY]
-    form = UserForm()
+#     if CURR_USER_KEY in session:
+#         del session[CURR_USER_KEY]
+#     form = UserForm()
 
-    if form.validate_on_submit():
-        try:
-            user = User.signup(
-                username=form.username.data,
-                password=form.password.data,
-                image_url=form.image_url.data or User.image_url.default.arg,
-            )
-            db.session.commit()
+#     if form.validate_on_submit():
+#         try:
+#             user = User.signup(
+#                 username=form.username.data,
+#                 password=form.password.data,
+#                 image_url=form.image_url.data or User.image_url.default.arg,
+#             )
+#             db.session.commit()
 
-        except IntegrityError:
-            flash("Username already taken", 'danger')
-            return render_template('users/signup.html', form=form)
+#         except IntegrityError:
+#             flash("Username already taken", 'danger')
+#             return render_template('users/signup.html', form=form)
 
-        do_login(user)
+#         do_login(user)
 
-        return redirect("/")
+#         return redirect("/")
 
-    else:
-        return render_template('users/signup.html', form=form)
-
-
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    """Handle user login and redirect to homepage on success."""
-
-    form = UserForm()
-
-    if form.validate_on_submit():
-        user = User.authenticate(
-            form.username.data,
-            form.password.data)
-
-        if user:
-            do_login(user)
-            flash(f"Hello, {user.username}!", "success")
-            return redirect("/")
-
-        flash("Invalid credentials.", 'danger')
-
-    return render_template('users/login.html', form=form)
+#     else:
+#         return render_template('users/signup.html', form=form)
 
 
-@app.post('/logout')
-def logout():
-    """Handle logout of user and redirect to homepage."""
+# @app.route('/login', methods=["GET", "POST"])
+# def login():
+#     """Handle user login and redirect to homepage on success."""
 
-    form = g.csrf_form
+#     form = UserForm()
 
-    if not form.validate_on_submit() or not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+#     if form.validate_on_submit():
+#         user = User.authenticate(
+#             form.username.data,
+#             form.password.data)
 
-    do_logout()
+#         if user:
+#             do_login(user)
+#             flash(f"Hello, {user.username}!", "success")
+#             return redirect("/")
 
-    flash("You have successfully logged out.", 'success')
-    return redirect("/login")
+#         flash("Invalid credentials.", 'danger')
+
+#     return render_template('users/login.html', form=form)
+
+
+# @app.post('/logout')
+# def logout():
+#     """Handle logout of user and redirect to homepage."""
+
+#     form = g.csrf_form
+
+#     if not form.validate_on_submit() or not g.user:
+#         flash("Access unauthorized.", "danger")
+#         return redirect("/")
+
+#     do_logout()
+
+#     flash("You have successfully logged out.", 'success')
+#     return redirect("/login")
 
 
 @app.route("/")
 def render_form():
     return render_template("form.html")
 
+
+############################## AWS Routes ################################
 
 # function to check file extension
 
@@ -196,6 +198,7 @@ def create():
         flash("File type not accepted,please try again.")
         return redirect(url_for('new'))
 
+############################## User Routes ####################################
 
 @app.post('/users')
 def list_users():
@@ -206,9 +209,9 @@ def list_users():
 
     # db.session.commit()
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    # if not g.user:
+    #     flash("Access unauthorized.", "danger")
+    #     return redirect("/")
 
     search = request.args.get('q')
 
@@ -282,21 +285,25 @@ def delete_user():
 ####################### Location Routes ########################
 
 
-@app.route('/location/add', methods=["GET", "POST"])
+@app.route('/locations/add', methods=["GET", "POST"])
 def add_location():
     """Add new location."""
 
     form = AddLocationForm()
 
-    user = User.query.get(session[CURR_USER_KEY])
-    print(user)
+    user = User.query.all()
+    user1 = User.query.filter_by(username='ez').first()
+    print(user1, "<----------- now in user1 in location route")
+    
+    print(request.form, "<--------- form form")
 
     if form.validate_on_submit():
         try:
+            num_price=float(form.price.data)
             location = Location.add(
-                owner_id=form.owner_id.data,
+                owner_id=user1.id,
                 image_url=form.image_url.data or Location.image_url.default.arg,
-                price=form.price.data,
+                price=num_price,
                 details=form.details.data,
                 address=form.address.data,
             )
@@ -306,11 +313,14 @@ def add_location():
             flash("Invalid information", 'danger')
             return render_template('location/add.html', form=form)
 
+        print("validated on submit")
         return redirect("/")
 
     else:
-        print(form)
-        return render_template('/base.html', form=form)
+        # breakpoint()
+        print("sorry not validated")
+    print(form, "<---------- result")
+    return render_template('base.html', form=form)
 
 
 @app.errorhandler(404)
