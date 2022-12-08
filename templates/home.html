@@ -9,8 +9,10 @@
       <h2 class="home">Home</h2>
 
         {% for location in locations %}
-          <h1>{{ location.address }}</h1>
-          <img src="{{location.image_url}}" alt="{{location.address}}"/>
+          <a href="/locations/{{location.id}}">
+            <h1>{{ location.address }}</h1>
+            <img src="{{location.image_url}}" alt="{{location.address}}"/>
+          </a>
         {% endfor %}
 
     </div>

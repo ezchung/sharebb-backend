@@ -242,17 +242,17 @@ def show_user(user_id):
 
     user = User.query.get_or_404(user_id)
 
-    return render_template('show.html', user=user)
+    return render_template('/users/show.html', user=user)
 
 
-@app.route('/users/<int:user_id>/profile', methods=["GET", "POST"])
+@app.route('/users/<int:user_id>/edit', methods=["GET", "POST"])
 def edit_profile(user_id):
-    """Update profile for current user.
+    """Update/edit profile for current user.
 
     Redirect to user page on success.
     """
 
-    if not g.user:
+    if not g.user or g.user.id != user_id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -343,6 +343,19 @@ def add_location():
             return redirect("/locations/add")
 
     return render_template('add_locations.html', form=form)
+
+
+@app.get('/locations/<int:location_id>')
+def show_location(location_id):
+    """ Displays location details  
+        Buttons to book or to go to owner's profile
+    """
+
+    location = Location.query.get_or_404(location_id)
+    user_id = location.user.id
+    print(user_id, "<------------ user id here")
+
+    return render_template('/locations/show.html', location=location, user_id=user_id)
 
 
 @app.errorhandler(404)

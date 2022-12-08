@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block body_class %}onboarding{% endblock %}
+
+{% block content %}
+  <!-- Edit Form -->
+  <div class="row justify-content-md-center">
+    <div class="col-md-7 col-lg-5">
+      <h2 class="location-profile">Location</h2>
+
+        <h1>{{location.address}}</h1>
+        <img src="{{location.image_url}}" alt="{{location.address}}"/>
+        <p>{{location.details}}</p>
+
+        <a href="/" class="btn btn-primary btn-lg">Book</a>
+        <a href="/users/{{user_id}}" class="btn btn-primary btn-lg">Go To Owner Profile</a>
+    </div>
+  </div>
+
+{% endblock %}
