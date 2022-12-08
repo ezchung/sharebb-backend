@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block body_class %}onboarding{% endblock %}
+
+{% block content %}
+  <!-- Edit Form -->
+  <div class="row justify-content-md-center">
+    <div class="col-md-7 col-lg-5">
+      <h2 class="edit-profile">Edit</h2>
+
+      <form method="POST" id="user_form">
+        {{ form.hidden_tag() }}
+
+        {% for field in form if field.widget.input_type != 'hidden' %}
+          {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          {{ field(placeholder=field.label.text, class="form-control") }}
+        {% endfor %}
+
+        {% for location in user.locations %}
+          <h1>{{ location.address }}</h1>
+          <img src="{{location.image_url}}" alt="{{location.address}}"/>
+        {% endfor %}
+
+        <button class="btn btn-primary btn-lg">Submit</button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

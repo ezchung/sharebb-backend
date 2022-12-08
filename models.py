@@ -30,6 +30,8 @@ class User(db.Model):
         nullable=False,
     )
 
+    locations = db.relationship('Location', backref="user")
+
     def __repr__(self):
         return f"<User #{self.id}: {self.username}>"
 

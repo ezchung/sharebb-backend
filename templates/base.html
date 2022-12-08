@@ -12,36 +12,43 @@
 
   <link rel="stylesheet"
         href="https://www.unpkg.com/bootstrap-icons/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="/static/stylesheets/style.css">
+  <link rel="stylesheet" href="/static/stylesheets/styles.css">
   <link rel="shortcut icon" href="/static/favicon.ico">
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
 
-  <div class="container-fluid">
-    <ul>
-      {% if not g.user %}
-            <li><a href="/signup">Sign up</a></li>
-            <li><a href="/login">Log in</a></li>
-      {% else %}
-            <li>
-              <a href="/users/{{ g.user.id }}">
-                {{ g.user.username }}
-              </a>
-            </li>
-             <li><a href="/">Users</a></li>
-            <!-- <li><a href="/">New Message</a></li> -->
-          <form action="/logout" method="POST">
-            {{ g.csrf_form.hidden_tag() }}
-            <li><button class="link-button">Log Out</button></li>
-            <!-- <a href="/logout">Log out</a> -->
-          </form>
-      {% endif %}
-    </ul>
-  </div>
+  <nav class="navbar navbar-expand">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav navbar-right">
 
-{% block content %}
-{% endblock %}
+        {% if not g.user %}
+              <li><a href="/signup">Sign up</a></li>
+              <li><a href="/login">Log in</a></li>
+        {% else %}
+              <li>
+                <a href="/users/{{ g.user.id }}">
+                  {{ g.user.username }}
+                </a>
+              </li>
+              <li><a href="/locations/add">Add Locations</a></li>
+              <li><a href="/users/profile">Profile</a></li>
+            <form action="/logout" method="POST">
+              {{ g.csrf_form.hidden_tag() }}
+              <li><button class="link-button">Log Out</button></li>
+              <!-- <a href="/logout">Log out</a> -->
+            </form>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+<div class="container">
+
+  {% block content %}
+  {% endblock %}
+
+</div>
 
 </div>
 </body>

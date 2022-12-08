@@ -70,41 +70,40 @@ def do_logout():
         del session[CURR_USER_KEY]
 
 
-# @app.route('/signup', methods=["GET", "POST"])
-# def signup():
-#     """Handle user signup.
+@app.route('/signup', methods=["GET", "POST"])
+def signup():
+    """Handle user signup.
 
-#     Create new user and add to DB. Redirect to home page.
+    Create new user and add to DB. Redirect to home page.
 
-#     If form not valid, present form.
+    If form not valid, present form.
 
-#     If the there already is a user with that username: flash message
-#     and re-present form.
-#     """
+    If the there already is a user with that username: flash message
+    and re-present form.
+    """
 
-#     if CURR_USER_KEY in session:
-#         del session[CURR_USER_KEY]
-#     form = UserForm()
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
+    form = UserForm()
 
-#     if form.validate_on_submit():
-#         try:
-#             user = User.signup(
-#                 username=form.username.data,
-#                 password=form.password.data,
-#                 image_url=form.image_url.data or User.image_url.default.arg,
-#             )
-#             db.session.commit()
+    if form.validate_on_submit():
+        try:
+            user = User.signup(
+                username=form.username.data,
+                password=form.password.data
+            )
+            db.session.commit()
 
-#         except IntegrityError:
-#             flash("Username already taken", 'danger')
-#             return render_template('users/signup.html', form=form)
+        except IntegrityError:
+            flash("Username already taken", 'danger')
+            return render_template('signup.html', form=form)
 
-#         do_login(user)
+        do_login(user)
 
-#         return redirect("/")
+        return redirect("/")
 
-#     else:
-#         return render_template('users/signup.html', form=form)
+    else:
+        return render_template('signup.html', form=form)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -146,6 +145,9 @@ def logout():
 
 @app.route("/")
 def render_form():
+    if g.user:
+      locations = Location.query.all()
+      return render_template("home.html", locations=locations)
     return render_template("base.html")
 
 
@@ -249,6 +251,11 @@ def edit_profile():
 
     user = g.user
     form = UserEditForm(obj=user)
+    print("Hello Im here----------------------------------------")
+    print(user.locations, "<--------- locations")
+
+    # Make an array. Call a function on class User to get list of address
+    # When rendering template, pass in array of locations
 
     if form.validate_on_submit():
         if User.authenticate(user.username, form.password.data):
@@ -259,7 +266,7 @@ def edit_profile():
 
         flash("Wrong password, please try again.", 'danger')
 
-    return render_template('users/edit.html', form=form, user_id=user.id)
+    return render_template('edit.html', form=form, user_id=user.id, user=user)
 
 
 @app.post('/users/delete')
@@ -291,8 +298,7 @@ def add_location():
 
     form = AddLocationForm()
 
-    user = User.query.all()
-    user1 = User.query.filter_by(username='ez').first()
+    user = User.query.filter_by(username=g.user.username).first()
     # print(user1, "<----------- now in user1 in location route")
     
     # print(request.form, "<--------- form form")
@@ -301,7 +307,7 @@ def add_location():
         try:
             num_price=float(form.price.data)
             location = Location.add(
-                owner_id=user1.id,
+                owner_id=user.id,
                 image_url=form.image_url.data or Location.image_url.default.arg,
                 price=num_price,
                 details=form.details.data,
