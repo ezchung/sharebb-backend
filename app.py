@@ -187,6 +187,12 @@ def create():
             sThree = boto3.client('s3')
             result = s3.list_buckets()
             print(result, "<----- result")
+            # obj = s3.get_object(Bucket=BUCKET_NAME, Key=file.filename)
+            # print(obj['Body'], "<========== object")
+            # j = f'https://{BUCKET_NAME}.s3.{REGION_CODE}.amazonaws.com/{file.filename}'
+            # print(j, "<------------ picture url")
+            # i = f'https://s3.{REGION_CODE}.amazonaws.com/{BUCKET_NAME}/{file.filename}'
+            # print(i, "<=============== picture 2")
             flash("Success upload")
             return redirect("/")
 

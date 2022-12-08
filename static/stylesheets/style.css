@@ -1,0 +1,10 @@
+
+
+.card-body.img{
+    height:50px;
+    object-fit: cover;
+}
+
+.nav-item{ 
+  margin-right: 15px; /* if the nav is on the right */ 
+} 
