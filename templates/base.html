@@ -27,12 +27,12 @@
               <li><a href="/login">Log in</a></li>
         {% else %}
               <li>
-                <a href="/users/{{ g.user.id }}">
-                  {{ g.user.username }}
+                <a href="/">
+                  Home
                 </a>
               </li>
               <li><a href="/locations/add">Add Locations</a></li>
-              <li><a href="/users/profile">Profile</a></li>
+              <li><a href="/users/{{g.user.id}}">{{g.user.username}}</a></li>
             <form action="/logout" method="POST">
               {{ g.csrf_form.hidden_tag() }}
               <li><button class="link-button">Log Out</button></li>

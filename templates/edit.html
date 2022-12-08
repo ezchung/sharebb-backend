@@ -18,11 +18,6 @@
           {{ field(placeholder=field.label.text, class="form-control") }}
         {% endfor %}
 
-        {% for location in user.locations %}
-          <h1>{{ location.address }}</h1>
-          <img src="{{location.image_url}}" alt="{{location.address}}"/>
-        {% endfor %}
-
         <button class="btn btn-primary btn-lg">Submit</button>
       </form>
     </div>

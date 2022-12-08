@@ -235,7 +235,7 @@ def show_user(user_id):
 
     user = User.query.get_or_404(user_id)
 
-    return render_template('users/show.html', user=user)
+    return render_template('show.html', user=user)
 
 
 @app.route('/users/profile', methods=["GET", "POST"])
@@ -300,7 +300,7 @@ def add_location():
 
     user = User.query.filter_by(username=g.user.username).first()
     # print(user1, "<----------- now in user1 in location route")
-    
+
     # print(request.form, "<--------- form form")
 
     if form.validate_on_submit():

@@ -1,9 +1,17 @@
+TODO:
+
+- Fix route for username link, button for editing user info
+- Clean up HTML (image sizing)
+- Search function
+- Include upload in "Add Location"
+- Include route to show all users
+- Include route to delete user
+- Add page to show location details (html, route)
+
 1. Booking
-    Create table/model for booking
-    Connect booking with users & locations
+   Create table/model for booking
+   Click image on homepage to go to location ID (show details) and be able to book location
+   Connect booking with users & locations
 
-2. Home 
-    Show all locations
-
-3. Get the url from AWS
-    and place image url into database
+2. Get the url from AWS
+   and place image url into database
