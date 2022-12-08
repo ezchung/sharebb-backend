@@ -23,19 +23,19 @@
       <ul class="nav navbar-nav navbar-right">
 
         {% if not g.user %}
-              <li><a href="/signup">Sign up</a></li>
-              <li><a href="/login">Log in</a></li>
+              <li class="nav-item"><a href="/signup">Sign up</a></li>
+              <li class="nav-item"><a href="/login">Log in</a></li>
         {% else %}
-              <li>
+              <li class="nav-item">
                 <a href="/">
                   Home
                 </a>
               </li>
-              <li><a href="/locations/add">Add Locations</a></li>
-              <li><a href="/users/{{g.user.id}}">{{g.user.username}}</a></li>
+              <li class="nav-item"><a href="/locations/add">Add Locations</a></li>
+              <li class="nav-item"><a href="/users/{{g.user.id}}">{{g.user.username}}</a></li>
             <form action="/logout" method="POST">
               {{ g.csrf_form.hidden_tag() }}
-              <li><button class="link-button">Log Out</button></li>
+              <li class="nav-item"><button class="link-button">Log Out</button></li>
               <!-- <a href="/logout">Log out</a> -->
             </form>
         {% endif %}

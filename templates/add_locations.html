@@ -7,7 +7,7 @@
   <div class="row justify-content-md-center">
     <div class="col-md-7 col-lg-5">
       <h2 class="join-message">Add Location</h2>
-      <form method="POST" id="user_form">
+      <form method="POST" id="user_form" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
         {% for field in form if field.widget.input_type != 'hidden' %}

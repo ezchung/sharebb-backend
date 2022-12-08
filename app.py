@@ -35,6 +35,7 @@ db.create_all()
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 BUCKET_NAME = os.environ["AWS_BUCKET_NAME"]
+REGION_CODE = os.environ["REGION_CODE"]
 
 ####################### User Routes ########################
 
@@ -244,8 +245,8 @@ def show_user(user_id):
     return render_template('show.html', user=user)
 
 
-@app.route('/users/profile', methods=["GET", "POST"])
-def edit_profile():
+@app.route('/users/<int:user_id>/profile', methods=["GET", "POST"])
+def edit_profile(user_id):
     """Update profile for current user.
 
     Redirect to user page on success.
@@ -305,34 +306,43 @@ def add_location():
     form = AddLocationForm()
 
     user = User.query.filter_by(username=g.user.username).first()
-    # print(user1, "<----------- now in user1 in location route")
-
-    # print(request.form, "<--------- form form")
-
+    
     if form.validate_on_submit():
-        try:
-            num_price=float(form.price.data)
-            location = Location.add(
-                owner_id=user.id,
-                image_url=form.image_url.data or Location.image_url.default.arg,
-                price=num_price,
-                details=form.details.data,
-                address=form.address.data,
-            )
-            db.session.commit()
 
-        except IntegrityError:
-            flash("Invalid information", 'danger')
-            return render_template('location/add.html', form=form)
+        #Once user submits, upload the image
+        # if there are no errors continue
+        file = request.files["image_url"]
+        print(file, "<-------------- file")
 
-        # print("validated on submit")
-        return redirect("/")
+        if file.filename == '':
+            flash("No selected file")
+            return redirect('/locations/add')
+        
+        if file and allowed_file(file.filename):
+            output = upload_file_to_s3(file)
 
-    else:
-        # breakpoint()
-    #     print("sorry not validated")
-    # print(form, "<---------- result")
-      return render_template('add_locations.html', form=form)
+            if output:
+                try:
+                    img_url = f'https://s3.{REGION_CODE}.amazonaws.com/{BUCKET_NAME}/{file.filename}'
+                    location = Location.add(
+                        owner_id=user.id,
+                        image_url=img_url, #change to img url from aws
+                        price=form.price.data,
+                        details=form.details.data,
+                        address=form.address.data,
+                    )
+                    db.session.commit()
+
+                except IntegrityError:
+                    flash("Invalid information", 'danger')
+                    return render_template('location/add.html', form=form)
+
+                # print("validated on submit")
+                return redirect("/")
+        else:
+            return redirect("/locations/add")
+
+    return render_template('add_locations.html', form=form)
 
 
 @app.errorhandler(404)

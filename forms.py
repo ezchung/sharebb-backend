@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, FloatField
+from wtforms import StringField, PasswordField, TextAreaField, FloatField, FileField
 from wtforms.validators import DataRequired, Length
 
 
@@ -34,4 +34,4 @@ class AddLocationForm(FlaskForm):
     details = TextAreaField('Details', validators=[DataRequired()])
     address = TextAreaField('Address', validators=[
                             DataRequired(), Length(min=6)])
-    image_url = StringField('Image URL', validators=[DataRequired()])
+    image_url = FileField('Image URL', validators=[DataRequired()])
