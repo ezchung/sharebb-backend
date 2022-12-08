@@ -1,13 +1,12 @@
 TODO:
 
 - Fix route for username link, button for editing user info ***DONE
-- Clean up HTML (image sizing) 
-- Search function
+- Clean up HTML (image sizing)
+- Search function ***DONE
 - Include upload in "Add Location"  ***DONE
-- Include route to show all users   
 - Include route to delete user
 - Add page to show location details (html, route) ***DONE
-- show flashed error messages 
+- show flashed error messages
 
 1. Booking
    Create table/model for booking

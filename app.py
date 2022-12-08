@@ -147,8 +147,8 @@ def logout():
 @app.route("/")
 def render_form():
     if g.user:
-      locations = Location.query.all()
-      return render_template("home.html", locations=locations)
+        locations = Location.query.all()
+        return render_template("home.html", locations=locations)
     return render_template("base.html")
 
 
@@ -208,28 +208,6 @@ def create():
         return redirect(url_for('new'))
 
 ############################## User Routes ####################################
-
-@app.post('/users')
-def list_users():
-    """Page with listing of users.
-
-    Can take a 'q' param in querystring to search by that username.
-    """
-# TODO: change class to Locations as well as route
-    db.session.commit()
-
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    search = request.args.get('q')
-
-    if not search:
-        users = User.query.all()
-    else:
-        users = User.query.filter(User.username.like(f"%{search}%")).all()
-
-    return render_template('users/index.html', users=users)
 
 
 @app.get('/users/<int:user_id>')
@@ -306,10 +284,10 @@ def add_location():
     form = AddLocationForm()
 
     user = User.query.filter_by(username=g.user.username).first()
-    
+
     if form.validate_on_submit():
 
-        #Once user submits, upload the image
+        # Once user submits, upload the image
         # if there are no errors continue
         file = request.files["image_url"]
         print(file, "<-------------- file")
@@ -317,7 +295,7 @@ def add_location():
         if file.filename == '':
             flash("No selected file")
             return redirect('/locations/add')
-        
+
         if file and allowed_file(file.filename):
             output = upload_file_to_s3(file)
 
@@ -326,7 +304,7 @@ def add_location():
                     img_url = f'https://s3.{REGION_CODE}.amazonaws.com/{BUCKET_NAME}/{file.filename}'
                     location = Location.add(
                         owner_id=user.id,
-                        image_url=img_url, #change to img url from aws
+                        image_url=img_url,  # change to img url from aws
                         price=form.price.data,
                         details=form.details.data,
                         address=form.address.data,
@@ -347,7 +325,7 @@ def add_location():
 
 @app.get('/locations/<int:location_id>')
 def show_location(location_id):
-    """ Displays location details  
+    """ Displays location details
         Buttons to book or to go to owner's profile
     """
 
@@ -356,6 +334,30 @@ def show_location(location_id):
     print(user_id, "<------------ user id here")
 
     return render_template('/locations/show.html', location=location, user_id=user_id)
+
+
+@app.get('/locations')
+def list_users():
+    """Page with listing of locations.
+
+    Can take a 'q' param in querystring to search by that username.
+    """
+
+    db.session.commit()
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    search = request.args.get('q')
+
+    if not search:
+        locations = Location.query.all()
+    else:
+        locations = Location.query.filter(
+            Location.address.ilike(f"%{search}%")).all()
+
+    return render_template('home.html', locations=locations)
 
 
 @app.errorhandler(404)

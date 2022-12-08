@@ -1,0 +1,16 @@
+
+{% block searchbox %}
+  <li>
+    <form class="navbar-form navbar-end" action="/locations">
+      <input
+          name="q"
+          class="form-control"
+          placeholder="Search ShareBnB"
+          aria-label="Search"
+          id="search">
+      <button class="btn btn-default">
+        <span class="bi bi-search"></span>
+      </button>
+    </form>
+  </li>
+{% endblock %}
