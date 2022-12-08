@@ -146,7 +146,7 @@ def logout():
 
 @app.route("/")
 def render_form():
-    
+
     form = g.csrf_form
 
     if g.user:
@@ -177,7 +177,10 @@ def show_user(user_id):
 
     user = User.query.get_or_404(user_id)
 
-    return render_template('/users/show.html', user=user)
+    bookings = user.booked_locations
+    print(bookings, "<--------------------------BOOKINGS")
+
+    return render_template('/users/show.html', user=user, bookings=bookings)
 
 
 @app.route('/users/<int:user_id>/edit', methods=["GET", "POST"])
