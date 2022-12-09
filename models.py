@@ -179,7 +179,7 @@ class Booking(db.Model):
             db.session.delete(booked)
 
 
-class Message(db.Model):
+class MessageRoom(db.Model):
     """ Messages in the system """
 
     __tablename__ = 'messages'
@@ -189,7 +189,28 @@ class Message(db.Model):
         primary_key=True
     )
 
+    owner_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id')
+    )
+
+    booker_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id')
+    )
+
+    @classmethod
+    def create_room(cls, owner_id, booker_id):
+        """ Create room for owner and booker to speak
+        """
+        return None
     
+    @classmethod
+    def delete_room(cls, room_id):
+
+        return None
+
+
 
 
 def connect_db(app):
