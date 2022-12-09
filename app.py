@@ -66,7 +66,7 @@ def do_login(user):
 
 def do_logout():
     """Log out user."""
-    print(session[CURR_USER_KEY], "DO LOGOUT")
+
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
@@ -135,12 +135,11 @@ def logout():
     form = g.csrf_form
     # breakpoint()
     if not form.validate_on_submit() or not g.user:
-        print("FORM VALIDATE ON SUBMIT OR NOT G.USER")
+
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     do_logout()
-    print("LOGOUT")
 
     flash("You have successfully logged out.", 'success')
     return redirect("/login")
@@ -201,8 +200,6 @@ def edit_profile(user_id):
 
     user = g.user
     form = UserEditForm(obj=user)
-    print("Hello Im here----------------------------------------")
-    print(user.locations, "<--------- locations")
 
     # Make an array. Call a function on class User to get list of address
     # When rendering template, pass in array of locations FIXME:
@@ -249,7 +246,7 @@ def list_users():
     Can take a 'q' param in querystring to search by that username.
     """
 
-    form=g.csrf_form
+    form = g.csrf_form
 
     db.session.commit()
 
@@ -295,7 +292,6 @@ def add_location():
         # Once user submits, upload the image
         # if there are no errors continue
         file = request.files["image_url"]
-        print(file, "<-------------- file")
 
         if file.filename == '':
             flash("No selected file")
@@ -348,6 +344,7 @@ def booked_toggle(location_id):
 
     from_url = request.form['from-url']
     return redirect(from_url)
+
 
 @app.post('/locations/<int:location_id>/delete')
 def delete_location(location_id):

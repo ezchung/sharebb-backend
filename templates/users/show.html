@@ -12,6 +12,7 @@
       {% for location in user.locations %}
       <h1>{{ location.address }}</h1>
       <img src="{{location.image_url}}" alt="{{location.address}}"/>
+        <p>{{ location.users_who_booked }}</p>
         {% include "_book-button.html" %}
         {% if g.user.id == location.owner_id %}
           {% include "_delete-button.html"%}
