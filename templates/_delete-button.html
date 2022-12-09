@@ -1,0 +1,5 @@
+<form action="/locations/{{location.id}}/delete" method="POST">
+  {{ form.hidden_tag() }}
+  <input type="hidden" name="from-url" value="{{request.url}}">
+  <button class="btn btn-outline-danger">Delete</button>
+</form>

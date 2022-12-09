@@ -182,7 +182,6 @@ def show_user(user_id):
     user = User.query.get_or_404(user_id)
 
     bookings = user.booked_locations
-    print(bookings[0], "<--------------------------BOOKINGS")
 
     return render_template('/users/show.html', user=user, bookings=bookings, form=form)
 
@@ -248,6 +247,8 @@ def list_users():
     Can take a 'q' param in querystring to search by that username.
     """
 
+    form=g.csrf_form
+
     db.session.commit()
 
     if not g.user:
@@ -262,7 +263,7 @@ def list_users():
         locations = Location.query.filter(
             Location.address.ilike(f"%{search}%")).all()
 
-    return render_template('home.html', locations=locations)
+    return render_template('home.html', locations=locations, form=form)
 
 
 @app.get('/locations/<int:location_id>')
@@ -320,7 +321,6 @@ def add_location():
                     flash("Invalid information", 'danger')
                     return render_template('location/add.html', form=form)
 
-                # print("validated on submit")
                 return redirect("/")
         else:
             return redirect("/locations/add")
@@ -346,6 +346,23 @@ def booked_toggle(location_id):
 
     from_url = request.form['from-url']
     return redirect(from_url)
+
+@app.post('/locations/<int:location_id>/delete')
+def delete_location(location_id):
+    """
+        Input: location_id
+        Output: redirect to root
+        Delete location. Only owner can delete
+    """
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    location = Location.query.get_or_404(location_id)
+    db.session.delete(location)
+    db.session.commit()
+
+    return redirect(f"/users/{g.user.id}")
 
 
 @app.errorhandler(404)
