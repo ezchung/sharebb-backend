@@ -7,15 +7,21 @@
   <div class="row justify-content-md-center">
     <div class="col-md-7 col-lg-5">
       <h2 class="home">Home</h2>
-
-        {% for location in locations %}
-          <a href="/locations/{{location.id}}">
-            <h1>{{ location.address }}</h1>
-            <img src="{{location.image_url}}" alt="{{location.address}}"/>
-            <h1>{{ location.price }}</h1>
-          </a>
-          {% include "_book-button.html" %}
-        {% endfor %}
+      
+      {% for location in locations %}
+        <div class="card">
+            <a href="/locations/{{location.id}}">
+              <img  src="{{location.image_url}}" 
+                    alt="{{location.address}}"
+                    class="card-img-top"/>
+              <div class="card-body">
+                <h1 class="card-title">{{ location.address }}</h1>
+                <h1 class="card-text">{{ location.price }}</h1>
+              </div>
+            </a>
+            {% include "_book-button.html" %}
+        </div>
+      {% endfor %}
 
     </div>
   </div>
