@@ -22,7 +22,7 @@
     <div class="container-fluid">
       <div id="navbarNav">
         <ul class="nav navbar-nav navbar-right">
-  
+
           {% if not g.user %}
                 <li class="nav-item">
                   <a class="nav-link" href="/signup">Sign up</a>
@@ -43,8 +43,8 @@
                   <a class="nav-link" href="/users/{{g.user.id}}">{{g.user.username}}</a>
                 </li>
                 {% include "search.html" %}
+                <form action="/logout" method="POST">
                 {{ g.csrf_form.hidden_tag() }}
-              <form action="/logout" method="POST">
                 <li class="nav-item">
                   <button class="link-button logout-btn">Log Out</button>
                 </li>

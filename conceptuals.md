@@ -4,12 +4,13 @@ TODO:
 - Clean up HTML (image sizing)
 - Search function ***DONE
 - Include upload in "Add Location"  ***DONE
-- Include route to delete location  
+- Include route to delete location
 - Add page to show location details (html, route) ***DONE
+- TODO: fix logout button
 - TODO: show flashed error messages for login, signup, add location, edit
 - TODO: Add card divs to others like in home
 - TODO: Establish messages
-   - Look at images 
+   - Look at images
 
 1. Booking
    Create table/model for booking ***DONE

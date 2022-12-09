@@ -66,7 +66,7 @@ def do_login(user):
 
 def do_logout():
     """Log out user."""
-
+    print(session[CURR_USER_KEY], "DO LOGOUT")
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
@@ -133,12 +133,14 @@ def logout():
     """Handle logout of user and redirect to homepage."""
 
     form = g.csrf_form
-
+    # breakpoint()
     if not form.validate_on_submit() or not g.user:
+        print("FORM VALIDATE ON SUBMIT OR NOT G.USER")
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     do_logout()
+    print("LOGOUT")
 
     flash("You have successfully logged out.", 'success')
     return redirect("/login")
