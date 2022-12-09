@@ -31,9 +31,19 @@
 
 /* ################## Location Cards ######################################## */
 .card{
-  margin-bottom: 15px;
+  margin: 5px 5px 15px;
 }
 
 .logout-btn:hover{
   background-color:#FF385C;
+}
+
+/* ######################### LOCATION IMAGE ############################# */
+.location-img{
+  width: 50vw;
+}
+
+/* ######################### CARD LAYOUT ################################ */
+.home-cards{
+  display:grid
 }

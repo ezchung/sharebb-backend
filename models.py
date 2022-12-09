@@ -179,6 +179,19 @@ class Booking(db.Model):
             db.session.delete(booked)
 
 
+class Message(db.Model):
+    """ Messages in the system """
+
+    __tablename__ = 'messages'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    
+
+
 def connect_db(app):
     """Connect this database to provided Flask app."""
 

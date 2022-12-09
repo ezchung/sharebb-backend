@@ -7,26 +7,38 @@
     <div class="col-md-7 col-lg-5">
       <h2 class="user-profile">{{user.username}}'s Profile</h2>
       <a href="/users/{{g.user.id}}/edit" class="btn btn-primary btn-lg">Edit Profile</a>
+      <div class="container-fluid">
+        <div class="row">
 
-      <h3 class="user-locations">Properties</h3>
-      {% for location in user.locations %}
-      <h1>{{ location.address }}</h1>
-      <img src="{{location.image_url}}" alt="{{location.address}}"/>
-        <p>{{ location.users_who_booked }}</p>
-        {% include "_book-button.html" %}
-        {% if g.user.id == location.owner_id %}
-          {% include "_delete-button.html"%}
-        {% endif %}
-      {% endfor %}
+          <h3 class="user-locations">Properties</h3>
+    
+          {% for location in user.locations %}
+          <div class="card col-md-6">
+            <h1>{{ location.address }}</h1>
+            <img src="{{location.image_url}}" alt="{{location.address}}"/>
+              {% if location.users_who_booked|length > 0 %}
+              <p>{{ location.users_who_booked.username }}</p>
+              {%endif%}
+              {% include "_book-button.html" %}
+              {% if g.user.id == location.owner_id %}
+                {% include "_delete-button.html"%}
+              {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
 
       <h3 class="user-bookings">Bookings</h3>
       {% for location in bookings %}
+      <div class="card">
+
         <h1>{{ location.address }}</h1>
         <img src="{{location.image_url}}" alt="{{location.address}}"/>
         {% include "_book-button.html" %}
         {% if g.user.id == location.owner_id %}
           {% include "_delete-button.html"%}
         {% endif %}
+      </div>
       {% endfor %}
     </div>
   </div>

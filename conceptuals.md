@@ -9,9 +9,8 @@ Phil & Ezra's Talking Points:
 - Fix logout button ***DONE
 - Show flashed error messages for login, signup, add location, edit ***DONE
 - Added username of person who booked the property ***DONE
-- TODO: Add card divs to others like in home
+- Add card divs to others like in home ***DONE
 - TODO: Establish messages
-   - Look at images
 
 1. Booking
    Create table/model for booking ***DONE
@@ -37,4 +36,26 @@ SELECT address FROM locations
 
    - Getting the address where the owner of the location is phil.
 Translation to SQLAlchemy
--
+
+TODO:
+WHAT WE DO NEXT
+- Add messages (temporary)
+   - through maybe websockets (socket.io)
+
+- Add a map 
+   - through maybe Google Maps API
+
+- Make error messages clear on validate.
+   - Do not know which field is creating error
+
+
+Phil
+- AWS
+- Form Validation
+- ORM / Database 
+- What we planned on doing and what we already did
+
+Ezra
+- Maps API. How when we consider other libraries, our database needs to change
+   - on what information we store
+- Possibly combining two forms into one. AWS and database
