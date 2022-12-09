@@ -3,7 +3,6 @@
 {% block body_class %}onboarding{% endblock %}
 
 {% block content %}
-  <!-- Edit Form -->
   <div class="row justify-content-md-center">
     <div class="col-md-7 col-lg-5">
       <h2 class="user-profile">Profile</h2>
@@ -13,12 +12,14 @@
       {% for location in user.locations %}
       <h1>{{ location.address }}</h1>
       <img src="{{location.image_url}}" alt="{{location.address}}"/>
+        {% include "_book-button.html" %}
       {% endfor %}
 
       <h3 class="user-bookings">Bookings</h3>
-      {% for booking in bookings %}
-        <h1>{{ booking.address }}</h1>
-        <img src="{{booking.image_url}}" alt="{{booking.address}}"/>
+      {% for location in bookings %}
+        <h1>{{ location.address }}</h1>
+        <img src="{{location.image_url}}" alt="{{location.address}}"/>
+        {% include "_book-button.html" %}
       {% endfor %}
 
     </div>

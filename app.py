@@ -160,6 +160,8 @@ def render_form():
 """ Takes filename (string). Checks whether file is an allowed file
     Returns boolean
 """
+
+
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -171,6 +173,8 @@ def allowed_file(filename):
 def show_user(user_id):
     """Show user profile."""
 
+    form = g.csrf_form
+
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -178,9 +182,9 @@ def show_user(user_id):
     user = User.query.get_or_404(user_id)
 
     bookings = user.booked_locations
-    print(bookings, "<--------------------------BOOKINGS")
+    print(bookings[0], "<--------------------------BOOKINGS")
 
-    return render_template('/users/show.html', user=user, bookings=bookings)
+    return render_template('/users/show.html', user=user, bookings=bookings, form=form)
 
 
 @app.route('/users/<int:user_id>/edit', methods=["GET", "POST"])
@@ -236,6 +240,7 @@ def delete_user():
 
 ####################### Location Routes ########################
 
+
 @app.get('/locations')
 def list_users():
     """Page with listing of locations.
@@ -266,10 +271,12 @@ def show_location(location_id):
         Buttons to book or to go to owner's profile
     """
 
+    form = g.csrf_form
+
     location = Location.query.get_or_404(location_id)
     user_id = location.user.id
 
-    return render_template('/locations/show.html', location=location, user_id=user_id)
+    return render_template('/locations/show.html', location=location, user_id=user_id, form=form)
 
 
 @app.route('/locations/add', methods=["GET", "POST"])

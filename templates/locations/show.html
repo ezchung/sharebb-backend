@@ -11,9 +11,9 @@
         <h1>{{location.address}}</h1>
         <img src="{{location.image_url}}" alt="{{location.address}}"/>
         <p>{{location.price}}</p>
+        {% include "_book-button.html" %}
         <p>{{location.details}}</p>
 
-        <a href="/" class="btn btn-primary btn-lg">Book</a>
         <a href="/users/{{user_id}}" class="btn btn-primary btn-lg">Go To Owner Profile</a>
     </div>
   </div>
