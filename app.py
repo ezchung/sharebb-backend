@@ -26,9 +26,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ['DATABASE_URL'].replace("postgres://", "postgresql://"))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+# If turning off redirects, commment out or change to False
+# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-toolbar = DebugToolbarExtension(app)
+# Turning off toolbar
+# toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()

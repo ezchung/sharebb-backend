@@ -35,3 +35,5 @@ class AddLocationForm(FlaskForm):
     address = TextAreaField('Address', validators=[
                             DataRequired(), Length(min=6)])
     image_url = FileField('Image URL', validators=[DataRequired()])
+
+
