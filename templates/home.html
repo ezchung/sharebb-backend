@@ -1,37 +1,36 @@
-{% extends 'base.html' %}
-
-{% block body_class %}onboarding{% endblock %}
-
-{% block content %}
-  <!-- Edit Form -->
-  <div class="container">
-    <h1 class="center-text">Home</h1>
-    <div class="row">
-      <div class="HomesList">
-        <div class="HomesList row">
-          {% for location in locations %}
-          <div class="HomesList-card col-md-4">
-            <a href="/locations/{{location.id}}">
+{% extends 'base.html' %} {% block body_class %}onboarding{% endblock %} {%
+block content %}
+<!-- Edit Form -->
+<div class="container">
+  <h1 class="center-text">Home</h1>
+  <div class="row">
+    <div class="HomesList">
+      <div class="HomesList row">
+        {% for location in locations %}
+        <div class="HomesList-card col-md-4">
+          <a href="/locations/{{location.id}}">
             <div class="HomesList">
               <div class="home-cards card mb-3">
-                <img  src="{{location.image_url}}" 
-                          alt="{{location.address}}"
-                          class="card-img-top"/>
-                    <div class="card-body">
-                      <h1 class="card-title">{{ location.address }}</h1>
-                      <h1 class="card-text">{{ location.price }}</h1>
+                <img
+                  src="{{location.image_url}}"
+                  alt="{{location.address}}"
+                  class="card-img-top"
+                />
+                <div class="card-body">
+                  <h5>Location</h5>
+                  <h2 class="card-title">{{ location.address }}</h2>
+                  <h5>Price</h5>
+                  <h2 class="card-text">${{ location.price }}</h2>
                   {% include "_book-button.html" %}
                 </div>
               </div>
             </div>
-            </a>
-          </div>
-          {% endfor %}
+          </a>
         </div>
+        {% endfor %}
       </div>
     </div>
-
-
   </div>
+</div>
 
 {% endblock %}

@@ -59,10 +59,30 @@
 }
 
 /* #################### NAVBAR #################################### */
+.nav-home{
+  margin-left: 40px;
+}
+
+.nav-home img{
+  width: 50px;
+  height: 50px
+}
+
+nav li{
+  align-items:center;
+  margin-left: 10px;
+}
+
+nav form{
+  align-items: center;
+  margin-left: 10px;
+}
+
 .navbar{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  list-style: none;
 }
 
 .nav-item{ 
@@ -89,6 +109,11 @@
   min-width: 348px;
 }
 
+.logout-btn:hover{
+  background-color:#FF385C;
+}
+
+
 
 /* ################## Location Cards ######################################## */
 .card{
@@ -101,8 +126,16 @@
   align-items: center;
 }
 
-.logout-btn:hover{
-  background-color:#FF385C;
+.HomesList-card a{
+  text-decoration: none;
+}
+
+.HomesList-card h5{
+  text-decoration: underline;
+}
+
+.like{
+  float: right;
 }
 
 /* ######################### LOCATION IMAGE ############################# */

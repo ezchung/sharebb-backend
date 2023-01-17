@@ -22,87 +22,34 @@
 
 <body class="{% block body_class %}{% endblock %}">
 
-  <nav class="navbar navbar-expand-md bg-light">
-    <div class="container-fluid">
-        <ul class="nav navbar-nav navbar-right d-flex justify-content-between">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand nav-link nav-home" href="/"><img src="/static/images/front-gate-open.png"></a>
 
-          {% if not g.user %}
-                <li class="nav-item">
-                  <a class="nav-link" href="/signup">Sign up</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/login">Log in</a>
-                </li>
-          {% else %}
-                <li class="nav-item">
-                  <a href="/" class="nav-link">
-                    Home
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/locations/add">Add Locations</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/users/{{g.user.id}}">{{g.user.username}}</a>
-                </li>
-                {% include "search.html" %}
-                <form action="/logout" method="POST">
-                {{ g.csrf_form.hidden_tag() }}
-                <li class="nav-item">
-                  <button class="link-button logout-btn">Log Out</button>
-                </li>
-              </form>
-          {% endif %}
-        </ul>
-    </div>
-  </nav>
-  <!-- <nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand">Navbar</a>
-      <form class="d-flex">
-        <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-        <li class="nav-item ml-auto">
-          <a class="nav-link" href="/logout">Logout</a>
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        {% if not g.user %}
+          <li class="nav-item">
+            <a class="nav-link" href="/signup">Sign up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Log in</a>
+          </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/locations/add">Add Locations</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/users/{{g.user.id}}">{{g.user.username}}</a>
+        </li>
+        {% include "search.html" %}
+      </ul>
+      <form class="form-inline my-2 my-lg-0" action="/logout" method="POST">
+        {{ g.csrf_form.hidden_tag() }}
+        <li class="nav-item nav-item-right">
+          <button class="link-button logout-btn">Log Out</button>
         </li>
       </form>
-    </div>
+      {% endif %}
   </nav>
-  With Chat -->
-  <!-- <nav class="navbar navbar-light bg-white">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-3">
-                <a class="navbar-brand" href="#">
-                    <img src="logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                    AirBnB
-                </a>
-            </div>
-            <div class="col-6">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Where are you going?" aria-label="Where are you going?">
-                    <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            </div>
-            <div class="col-3">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Explore</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">How to Host</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Help</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="#">Sign Up/Log In</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>                    
-  </nav> -->
 
 <div class="container">
 
