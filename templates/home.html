@@ -1,13 +1,13 @@
 {% extends 'base.html' %} {% block body_class %}onboarding{% endblock %} {%
 block content %}
 <!-- Edit Form -->
-<div class="container">
-  <h1 class="center-text">Home</h1>
+<div class="container home-container">
+  <h1 class="center-text">Explore</h1>
   <div class="row">
     <div class="HomesList">
       <div class="HomesList row">
         {% for location in locations %}
-        <div class="HomesList-card col-md-4">
+        <div class="HomesList-card col-md-3">
           <a href="/locations/{{location.id}}">
             <div class="HomesList">
               <div class="home-cards card mb-3">

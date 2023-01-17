@@ -147,3 +147,11 @@ nav form{
 .home-cards{
   display:grid
 }
+
+body{
+  background-color: rgb(221, 102, 102);
+}
+
+.home-container{
+  margin-top: 10px;
+}
