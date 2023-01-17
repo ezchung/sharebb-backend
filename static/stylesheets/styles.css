@@ -95,7 +95,11 @@
   margin: 5px 5px 15px;
 }
 
-
+.center-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .logout-btn:hover{
   background-color:#FF385C;
