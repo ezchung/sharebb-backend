@@ -155,7 +155,7 @@ def render_form():
     if g.user:
         locations = Location.query.all()
         return render_template("home.html", locations=locations, form=form)
-    return render_template("base.html")
+    return render_template("home-anon.html")
 
 
 ############################## AWS Function ################################

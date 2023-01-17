@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block searchbox %}
+  {# don't show this on anon homepage #}
+{% endblock %}
+
+{% block content %}
+<!--Home Signup-->
+  <div class="home-yard">
+    <h1>ShareBB</h1>
+    <h4>Home sweet, Heart complete</h4>
+    <div class="home-btns">
+        <a href="/signup" class="btn btn-primary">Sign up</a>
+        <a href="/login" class="btn btn-success">Login</a>
+    </div>
+  </div>
+{% endblock %}

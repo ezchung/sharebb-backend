@@ -7,7 +7,64 @@
     object-fit: cover;
 }
 
+/* ########################## HOMEPAGE ########################## */
+.home-yard {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  left: 0;
+  z-index: -1;
+  background-image: url("/static/images/backyard.jpg");
+  background-size: cover;
+  background-position: center center;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+  text-shadow: 0 0 8px #66757f;
+}
+
+.home-yard .btn {
+  text-shadow: none;
+  position: relative;
+  z-index: 1;
+  width: 150px;
+}
+
+.home-yard h1 {
+  margin-bottom: 4rem;
+}
+
+.home-yard:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.home-yard h4{
+  text-shadow: -1px -1px #333, 1px -1px #333, -1px 1px #333, 1px 1px #333;
+  margin-bottom: 20px;
+}
+
+.home-btns a{
+  margin: 0px 10px;
+}
+
 /* #################### NAVBAR #################################### */
+.navbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .nav-item{ 
   margin-right: 15px; /* if the nav is on the right */ 
   margin-bottom: 15px;
@@ -22,6 +79,10 @@
   margin: 0px 15px;
 }
 
+.nav-item-right{
+  margin-left: auto;
+}
+
 .search-container{
   display: block;
   flex: 0 1 auto;
@@ -33,6 +94,8 @@
 .card{
   margin: 5px 5px 15px;
 }
+
+
 
 .logout-btn:hover{
   background-color:#FF385C;
