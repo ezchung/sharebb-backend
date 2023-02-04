@@ -36,18 +36,25 @@
         </div>
     </div>
 
-      <h3 class="user-bookings">Bookings</h3>
-      {% for location in bookings %}
-      <div class="card">
-
-        <h1>{{ location.address }}</h1>
-        <img src="{{location.image_url}}" alt="{{location.address}}"/>
-        {% include "_book-button.html" %}
-        {% if g.user.id == location.owner_id %}
-          {% include "_delete-button.html"%}
-        {% endif %}
+    <div class="container home-container">
+      <div class="row">
+        <h3 class="user-bookings">Bookings</h3>
+        <div class="row">
+          {% for location in bookings %}
+          <div class="col-md-3">
+            <div class="card">
+              <h1>{{ location.address }}</h1>
+              <img src="{{location.image_url}}" alt="{{location.address}}"/>
+              {% include "_book-button.html" %}
+              {% if g.user.id == location.owner_id %}
+                {% include "_delete-button.html"%}
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
       </div>
-      {% endfor %}
+    </div>
     <!-- </div>
   </div> -->
 
