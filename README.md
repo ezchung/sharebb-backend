@@ -7,7 +7,7 @@ rental space or book a rental space. Personal pages of the user show their perso
 # Table of Contents
 1. [Features](#Features)
 2. [Tech Stack](#Tech-Stack)
-3. [Database Hierarchy](#DB-Hierarchy)
+3. [Database Relations](#DB-Relations)
 4. [Install](#Install)
 5. [Deployment](#Deployment)
 6. [Getting Started](#Boilerplate)
@@ -53,7 +53,7 @@ rental space or book a rental space. Personal pages of the user show their perso
     </a> &nbsp;
  </p>
 
-## Database Hierarchy<a name="DB-Hierarchy"></a>
+## Database Relations<a name="DB-Relations"></a>
 ![alt text](https://github.com/ezchung/sharebb-backend/blob/main/static/images/sharebb-database.jpg?raw=true)
 
 ## Install<a name="Install"></a>:
