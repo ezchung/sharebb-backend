@@ -32,7 +32,7 @@ rental space or book a rental space. Personal pages of the user show their perso
     <img src="https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg" alt="flask" width="40" height="40"/> 
   </a> &nbsp;
   <a href="https://flask.palletsprojects.com/" target="_blank" rel="noreferrer"> 
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="amazon web services" width="40" height="40"/>
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg" alt="amazon web services" width="40" height="40"/>
   </a> &nbsp;
  </p>
 
