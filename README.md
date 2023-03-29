@@ -68,7 +68,7 @@ Create virtual environment:
   1. python3 -m venv venv
   2. source venv/bin/activate
   3. pip3 install flask
-  4. 
+
 To help you get started with your very own: We use Flask SQLAlchemy to interact with PostgreSQL
   ```python (models.py)
   from flask_sqlalchemy import SQLAlchemy
