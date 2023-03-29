@@ -54,7 +54,7 @@ rental space or book a rental space. Personal pages of the user show their perso
  </p>
 
 ## Database Hierarchy<a name="DB-Hierarchy"></a>
-![alt text](https://github.com/ezchung/sharebb-backend/blob/main/static/images/sharebb-database.jpeg?raw=true)
+![alt text](https://github.com/ezchung/sharebb-backend/blob/main/static/images/sharebb-database.jpg?raw=true)
 
 ## Install<a name="Install"></a>:
 To install backend requirements from the requirements.txt file:
