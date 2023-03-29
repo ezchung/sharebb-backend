@@ -31,6 +31,9 @@ rental space or book a rental space. Personal pages of the user show their perso
   <a href="https://flask.palletsprojects.com/" target="_blank" rel="noreferrer"> 
     <img src="https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg" alt="flask" width="40" height="40"/> 
   </a> &nbsp;
+  <a href="https://flask.palletsprojects.com/" target="_blank" rel="noreferrer"> 
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="amazon web services" width="40" height="40"/>
+  </a> &nbsp;
  </p>
 
 ### Frontend
@@ -55,11 +58,14 @@ rental space or book a rental space. Personal pages of the user show their perso
 
 ## Install<a name="Install"></a>:
 To install backend requirements from the requirements.txt file:
-  pip3 freeze > requirements.txt
-  pip3 install -r requirements.txt
+ 
+ pip3 freeze > requirements.txt
+ 
+ pip3 install -r requirements.txt
 
 ## Deployment<a name="Deployment"></a>
 To deploy, make sure server (PostgreSql) is running and enter venv environment:
+
   flask run
   
 
@@ -97,4 +103,5 @@ To help you get started with your very own: We use Flask SQLAlchemy to interact 
   
 ## Testing<a name="Testing"></a>
 To test: 
-  python3 -m unittest
+ 
+ python3 -m unittest
